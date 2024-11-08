@@ -1,5 +1,16 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+.main-layout-Container {
+  height: auto;
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  background-color: black;
+  width: 10%;
 }
