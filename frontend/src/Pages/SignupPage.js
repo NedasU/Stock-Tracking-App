@@ -1,10 +1,12 @@
 import React from "react";
 import MainLayout from "../Components/MainLayout"
+import SignUp from "../Components/SignUp.js"
+
 
 function SignupPage(){
     return (
         <MainLayout>
-            <div>Hello</div>
+            <SignUp/>
         </MainLayout>
     );
 }
