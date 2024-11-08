@@ -1,0 +1,18 @@
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+.layout {
+    height: auto;
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    width: 15%;
+    height: 100%;
+    border: 1px solid #ddd;
+}
