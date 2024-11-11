@@ -57,3 +57,5 @@ class TradingSimulationData {
         }
     }
 }
+
+module.exports = TradingSimulationData;
