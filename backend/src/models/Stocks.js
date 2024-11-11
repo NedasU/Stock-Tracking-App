@@ -10,28 +10,49 @@ class Stocks {
     }
 
     static async findBySymbol(symbol) {
-        const [rows] = await db.execute("SELECT * FROM Stocks WHERE symbol = ?", [symbol]);
-        if (rows.length > 0) {
-            const {symbol, name, logo_url, last_update} = rows[0];
-            return new Stocks(symbol, name, logo_url, last_update);
+        try {
+            const [rows] = await db.execute("SELECT * FROM Stocks WHERE symbol = ?", [symbol]);
+            if (rows.length > 0) {
+                const {symbol, name, logo_url, last_update} = rows[0];
+                return new Stocks(symbol, name, logo_url, last_update);
+            }
+            return null;
+        } catch (err) {
+            console.log('Error retrieving stock: ', err);
+            throw err;
         }
-        return null;
     }
 
     static async addStock(symbol, name, logo_url, last_update) {
-        const query = "INSERT INTO Stocks (symbol, name, logo_url, last_update) VALUES (?, ?, ?, ?)";
-        await db.execute(query, [symbol, name, logo_url, last_update]);
-        return new Stocks(symbol, name, logo_url, last_update);
+        try {
+            const query = "INSERT INTO Stocks (symbol, name, logo_url, last_update) VALUES (?, ?, ?, ?)";
+            await db.execute(query, [symbol, name, logo_url, last_update]);
+            return new Stocks(symbol, name, logo_url, last_update);
+        } catch (err) {
+            console.log('Error adding stock: ', err);
+            throw err;
+        }
     }
     
     static async removeStock(symbol) {
-        const query = "DELETE FROM Stocks WHERE symbol = ?";
-        await db.execute(query, [symbol]);
+        try {
+            const query = "DELETE FROM Stocks WHERE symbol = ?";
+            const result = await db.execute(query, [symbol]);
+            return result;
+        } catch (err) {
+            console.log('Error removing stock: ', err);
+            throw err;
+        }
     }
 
     static async getAllStocks() {
-        const [rows] = await db.execute('SELECT * FROM Stocks');
-        return rows;
+        try {
+            const [rows] = await db.execute('SELECT * FROM Stocks');
+            return rows;
+        } catch (err) {
+            console.log('Error retrieving all stocks: ', err);
+            throw err;
+        }
     }
 
 }
