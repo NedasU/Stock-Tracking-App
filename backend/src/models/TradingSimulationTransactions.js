@@ -11,9 +11,9 @@ class TradingSimulationTransactions{
         this.timestamp = timestamp;
     }
 
-    static async AddTransaction(user_id, symbol, type, price, amount, timestamp){
+    static async AddTransaction(user_id, symbol, type, price, amount){
         try {
-            await db.execute("INSERT INTO TradingSimulaionTransactions (user_id, symbol, type, price, amount, timestamp) VALUES (?, ?, ?, ?, ?, ?", [user_id, symbol, type, price, amount, timestamp]);
+            await db.execute("INSERT INTO TradingSimulaionTransactions (user_id, symbol, type, price, amount) VALUES (?, ?, ?, ?, ?", [user_id, symbol, type, price, amount]);
 
         } catch (error) {
             console.error("error occured, ", error);
@@ -33,4 +33,20 @@ class TradingSimulationTransactions{
             throw error;
         }
     }
+
+    static async GetRecentPurchase(user_id, symbol){
+        try {
+            const [result] = await db.execute("SELECT * FROM TradingSimulationTransactions WHERE user_id = ? AND symbol = ? AND type = 'buy' ORDER BY timestamp DESC LIMIT 1", [user_id, symbol]);
+            if (result.length > 0){
+                const {id, user_id, symbol, type, price, amount, timestamp} = result[0];
+                return new TradingSimulationTransactions(id, user_id, symbol, type, price, amount, timestamp)
+            }
+            return null;
+        } catch (error) {
+            console.error("An Error occured, ", error);
+            throw error;
+        }
+    }
 }
+
+module.exports = TradingSimulationTransactions;
