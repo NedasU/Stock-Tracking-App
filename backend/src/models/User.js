@@ -8,7 +8,7 @@ class User{
         this.password_hash = password_hash;
     }
 
-    static async findbyid(id){
+    static async findById(id){
         try{
             const [rows] = await db.execute("SELECT * FROM Users WHERE id = ?", [id]);
             if (rows.length > 0){
@@ -22,7 +22,7 @@ class User{
         }
     }
 
-    static async findbyUsername(username){
+    static async findByUsername(username){
         try {
             const [rows] = await db.execute("SELECT * FROM Users WHERE username = ?", [username]);
             if (rows.length > 0){
@@ -38,9 +38,9 @@ class User{
 
     static async addNewUser(username, password_hash){
         try {
-            const [result] = await db.execute("INSERT INTO Users (username, password_hash) VALUES (? ?)", [username, password_hash])
+            const [result] = await db.execute("INSERT INTO Users (username, password_hash) VALUES (?, ?)", [username, password_hash])
             const user_id = result.insertId;
-            const found = await db.execute("SELECT * FROM Users WHERE id = ?", [user_id])
+            const [found] = await db.execute("SELECT * FROM Users WHERE id = ?", [user_id])
             if (found.length > 0){
                 const {id, username, password_hash} = found[0];
                 return new User(id, username, password_hash);
@@ -54,8 +54,8 @@ class User{
 
     static async removeUserById(id){
         try{
-            const result = await db.execute("DELETE FROM Users WHERE id = ?", [id]);
-            return result;
+            await db.execute("DELETE FROM Users WHERE id = ?", [id]);
+            return true;
         } catch (error){
             console.error("An Error occured: ", error)
             throw error;
